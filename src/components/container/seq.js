@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import StepBtn from "../step/step";
 import Tempo from "../tempo/tempo";
-import Instruments from "../Instruments/Instruments";
+
 import "./seq.css";
 export class container extends Component {
   state = {
@@ -47,6 +47,19 @@ export class container extends Component {
       <StepBtn />
     ]
   };
+  INSTRUMENT_LIST = [
+    "BassDrum",
+    "Snare",
+    "Hi-Tom",
+    "Mid-Tom",
+    "Lo-Tom",
+    "Rim",
+    "Clap",
+    "Cowbell",
+    "Crash",
+    "Open-HH",
+    "Clsd-HH"
+  ];
 
   play = () => {
     this.setState({ running: !this.state.running }, () => {
@@ -80,10 +93,10 @@ export class container extends Component {
     return (
       <React.Fragment>
         <Tempo changeBPM={this.handleBPM} />
+        <div className="play" onClick={this.play}>
+          {this.state.running ? "Stop" : "Start"}
+        </div>
         <div className="seq">
-          <div className="play" onClick={this.play}>
-            {this.state.running ? "Stop" : "Start"}
-          </div>
           {this.seqBtn.buttons.map((el, index) =>
             this.state.currentStep === index ||
             this.state.drum[index] === true ? (
@@ -94,16 +107,18 @@ export class container extends Component {
                 handle={this.stepSelect.bind(this, index)}
               />
             ) : (
-              ((
-                <StepBtn
-                  handle={this.stepSelect.bind(this, index)}
-                  key={index}
-                  value={index}
-                />
-              ),
-              <Instruments instrIndex={this.state.currentStep} />)
+              <StepBtn
+                handle={this.stepSelect.bind(this, index)}
+                key={index}
+                value={index}
+              />
             )
           )}
+        </div>
+        <div className="labels">
+          {this.INSTRUMENT_LIST.map(el => (
+            <div>{el}</div>
+          ))}
         </div>
       </React.Fragment>
     );

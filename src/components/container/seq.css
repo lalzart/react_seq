@@ -1,9 +1,17 @@
 .seq {
   margin-top: 60px;
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(17, 1fr);
+  justify-items: center;
+}
+.labels {
+  display: grid;
+  grid-template-columns: repeat(17, 1fr);
+  justify-items: center;
+  font-size: 12px;
 }
 .play {
+  display: inline;
   background: red;
   padding: 12px;
   border-radius: 5px;
