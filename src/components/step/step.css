@@ -1,0 +1,23 @@
+.step {
+  height: 40px;
+  width: 40px;
+  border-radius: 4px;
+  border: 2px solid #000;
+}
+.b {
+  position: relative;
+  display: flex;
+  height: 40px;
+  width: 40px;
+  border-radius: 4px;
+  border: 2px solid red;
+}
+.c {
+  position: absolute;
+  top: 0;
+  left: 44%;
+  width: 4px;
+  height: 12px;
+  background: red;
+  justify-self: center;
+}

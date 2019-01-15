@@ -1,0 +1,9 @@
+.bpm h3 {
+  display: inline-block;
+  font-size: 20px;
+}
+.bpm input {
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+}
