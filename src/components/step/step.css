@@ -1,14 +1,14 @@
 .step {
-  height: 40px;
-  width: 40px;
+  height: 60px;
+  width: 60px;
   border-radius: 4px;
   border: 2px solid #000;
 }
 .b {
   position: relative;
   display: flex;
-  height: 40px;
-  width: 40px;
+  height: 60px;
+  width: 60px;
   border-radius: 4px;
   border: 2px solid red;
 }

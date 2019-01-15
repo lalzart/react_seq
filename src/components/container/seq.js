@@ -1,13 +1,11 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import StepBtn from "../step/step";
 import Tempo from "../tempo/tempo";
 
 import "./seq.css";
 export class container extends Component {
   state = {
-    bpm: 500,
-    currentStep: null,
-    running: false,
     drum: [
       false,
       false,
@@ -49,40 +47,39 @@ export class container extends Component {
   };
   INSTRUMENT_LIST = [
     "BassDrum",
-    "Snare",
+    "SnareDrum",
     "Hi-Tom",
     "Mid-Tom",
-    "Lo-Tom",
-    "Rim",
-    "Clap",
+    "Low-Tom",
+    "RimShot",
+    "HandClap",
     "Cowbell",
-    "Crash",
-    "Open-HH",
-    "Clsd-HH"
+    "Cymbal",
+    "OpenHihat",
+    "ClosedHihat"
   ];
 
   play = () => {
-    this.setState({ running: !this.state.running }, () => {
-      if (this.state.running) {
-        const intervalId = setInterval(this.sequence, this.state.bpm);
-        this.setState({ intervalId: intervalId });
-      } else {
-        clearInterval(this.state.intervalId);
-      }
-    });
+    this.props.toggleSeq();
+    if (this.props.run) {
+      const intervalId = setInterval(this.sequence, this.props.bpm);
+      this.setState({ intervalId: intervalId });
+    } else {
+      clearInterval(this.state.intervalId);
+    }
   };
 
   sequence = () => {
-    if (this.state.currentStep >= 16) {
-      this.setState({ currentStep: 0 });
+    if (this.props.step >= 16) {
+      this.props.reset();
     } else {
-      this.setState({ currentStep: this.state.currentStep + 1 });
+      this.props.incrementStep();
     }
   };
 
   handleBPM = e => {
     let bpm = 15000 / e.target.value;
-    this.setState({ bpm: bpm });
+    this.props.bpmChange(bpm);
   };
   stepSelect = index => {
     this.setState({
@@ -92,14 +89,13 @@ export class container extends Component {
   render() {
     return (
       <React.Fragment>
-        <Tempo changeBPM={this.handleBPM} />
         <div className="play" onClick={this.play}>
-          {this.state.running ? "Stop" : "Start"}
+          {this.props.run ? "Stop" : "Start"}
         </div>
+        <Tempo className="tempo" changeBPM={this.handleBPM} />
         <div className="seq">
           {this.seqBtn.buttons.map((el, index) =>
-            this.state.currentStep === index ||
-            this.state.drum[index] === true ? (
+            this.props.step === index || this.state.drum[index] === true ? (
               <StepBtn
                 addClassB="b"
                 addClassC="c"
@@ -116,8 +112,8 @@ export class container extends Component {
           )}
         </div>
         <div className="labels">
-          {this.INSTRUMENT_LIST.map(el => (
-            <div>{el}</div>
+          {this.INSTRUMENT_LIST.map((el, i) => (
+            <div key={i}>{el}</div>
           ))}
         </div>
       </React.Fragment>
@@ -125,4 +121,24 @@ export class container extends Component {
   }
 }
 
-export default container;
+const mapStateToProps = state => {
+  return {
+    run: state.running,
+    bpm: state.bpm,
+    step: state.step
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    toggleSeq: () => dispatch({ type: "TOGGLE_SEQ" }),
+    bpmChange: bpmChanged => dispatch({ type: "CHANGE_BPM", val: bpmChanged }),
+    incrementStep: () => dispatch({ type: "INCREMENT" }),
+    reset: () => dispatch({ type: "RESET_SEQ" })
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(container);
