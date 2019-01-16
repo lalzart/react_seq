@@ -73,7 +73,10 @@ export class container extends Component {
       drum: this.state.drum.map((el, i) => (i === index ? !el : el))
     });
   };
-  instrSelect = () => {};
+  instrSelect = e => {
+    const selected = e.target.innerHTML;
+    this.props.activateInstrument(selected);
+  };
   render() {
     return (
       <React.Fragment>
@@ -100,11 +103,27 @@ export class container extends Component {
           )}
         </div>
         <div className="labels">
-          {Object.keys(this.props.instruments).map((el, i) => (
-            <div onClick={this.instrSelect} key={i}>
-              {el}
-            </div>
-          ))}
+          {Object.keys(this.props.instruments).map((el, i) =>
+            this.props.instruments[el].active ? (
+              <div
+                className="instrSelected"
+                onClick={this.instrSelect}
+                value={el}
+                key={i}
+              >
+                {el}
+              </div>
+            ) : (
+              <div
+                className="instrUnselected"
+                onClick={this.instrSelect}
+                value={el}
+                key={i}
+              >
+                {el}
+              </div>
+            )
+          )}
         </div>
       </React.Fragment>
     );
@@ -125,7 +144,9 @@ const mapDispatchToProps = dispatch => {
     toggleSeq: () => dispatch({ type: "TOGGLE_SEQ" }),
     bpmChange: bpmChanged => dispatch({ type: "CHANGE_BPM", val: bpmChanged }),
     incrementStep: () => dispatch({ type: "INCREMENT" }),
-    reset: () => dispatch({ type: "RESET_SEQ" })
+    reset: () => dispatch({ type: "RESET_SEQ" }),
+    activateInstrument: instr =>
+      dispatch({ type: "ACTIVATE_INSTRUMENT", pl: instr })
   };
 };
 
