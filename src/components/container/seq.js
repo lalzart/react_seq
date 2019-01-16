@@ -45,19 +45,6 @@ export class container extends Component {
       <StepBtn />
     ]
   };
-  INSTRUMENT_LIST = [
-    "BassDrum",
-    "SnareDrum",
-    "Hi-Tom",
-    "Mid-Tom",
-    "Low-Tom",
-    "RimShot",
-    "HandClap",
-    "Cowbell",
-    "Cymbal",
-    "OpenHihat",
-    "ClosedHihat"
-  ];
 
   play = () => {
     this.props.toggleSeq();
@@ -86,6 +73,7 @@ export class container extends Component {
       drum: this.state.drum.map((el, i) => (i === index ? !el : el))
     });
   };
+  instrSelect = () => {};
   render() {
     return (
       <React.Fragment>
@@ -112,8 +100,10 @@ export class container extends Component {
           )}
         </div>
         <div className="labels">
-          {this.INSTRUMENT_LIST.map((el, i) => (
-            <div key={i}>{el}</div>
+          {Object.keys(this.props.instruments).map((el, i) => (
+            <div onClick={this.instrSelect} key={i}>
+              {el}
+            </div>
           ))}
         </div>
       </React.Fragment>
@@ -125,7 +115,8 @@ const mapStateToProps = state => {
   return {
     run: state.running,
     bpm: state.bpm,
-    step: state.step
+    step: state.step,
+    instruments: state.instruments
   };
 };
 
