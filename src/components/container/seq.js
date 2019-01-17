@@ -5,26 +5,6 @@ import Tempo from "../tempo/tempo";
 
 import "./seq.css";
 export class container extends Component {
-  state = {
-    drum: [
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false
-    ]
-  };
   seqBtn = {
     buttons: [
       <StepBtn />,
@@ -69,12 +49,14 @@ export class container extends Component {
     this.props.bpmChange(bpm);
   };
   stepSelect = index => {
+    this.props.activateStep(index);
     this.setState({
       drum: this.state.drum.map((el, i) => (i === index ? !el : el))
     });
   };
   instrSelect = e => {
     const selected = e.target.innerHTML;
+    this.props.activeInstrument(selected);
     this.props.activateInstrument(selected);
   };
   render() {
@@ -86,7 +68,8 @@ export class container extends Component {
         <Tempo className="tempo" changeBPM={this.handleBPM} />
         <div className="seq">
           {this.seqBtn.buttons.map((el, index) =>
-            this.props.step === index || this.state.drum[index] === true ? (
+            this.props.step === index ||
+            this.props.currentInstr[index] === true ? (
               <StepBtn
                 addClassB="b"
                 addClassC="c"
@@ -135,7 +118,8 @@ const mapStateToProps = state => {
     run: state.running,
     bpm: state.bpm,
     step: state.step,
-    instruments: state.instruments
+    instruments: state.instruments,
+    currentInstr: state.instruments[state.activeInstrument].track
   };
 };
 
@@ -145,8 +129,11 @@ const mapDispatchToProps = dispatch => {
     bpmChange: bpmChanged => dispatch({ type: "CHANGE_BPM", val: bpmChanged }),
     incrementStep: () => dispatch({ type: "INCREMENT" }),
     reset: () => dispatch({ type: "RESET_SEQ" }),
+    activeInstrument: instr =>
+      dispatch({ type: "ACTIVE_INSTRUMENT", pl: instr }),
     activateInstrument: instr =>
-      dispatch({ type: "ACTIVATE_INSTRUMENT", pl: instr })
+      dispatch({ type: "ACTIVATE_INSTRUMENT", pl: instr }),
+    activateStep: step => dispatch({ type: "ACTIVATE_STEP", pl: step })
   };
 };
 

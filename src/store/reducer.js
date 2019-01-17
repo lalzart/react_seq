@@ -4,6 +4,7 @@ const initialState = {
   running: false,
   bpm: 120,
   step: null,
+  activeInstrument: "BassDrum",
   instruments: {
     BassDrum: {
       active: false,
@@ -174,7 +175,7 @@ const initialState = {
       ]
     },
     Cymbal: {
-      active: true,
+      active: false,
       track: [
         false,
         false,
@@ -235,6 +236,27 @@ const initialState = {
         false,
         false
       ]
+    },
+    Accent: {
+      active: false,
+      track: [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
     }
   }
 };
@@ -262,14 +284,36 @@ const reducer = (state = initialState, action) => {
         ...state,
         step: 0
       };
-    case "ACTIVATE_INSTRUMENT":
+    case "ACTIVATE_STEP":
+      const arr = state.activeInstrument;
       return {
         ...state,
         instruments: {
           ...state.instruments,
-          [action.pl]: {
-            ...state.instruments[action.pl],
-            active: !state.instruments[action.pl].active
+          [arr]: {
+            ...state.instruments[arr],
+            track: state.instruments[arr].track.map((el, i) =>
+              action.pl === i ? !el : el
+            )
+          }
+        }
+      };
+    case "ACTIVE_INSTRUMENT":
+      return {
+        ...state,
+        activeInstrument: !state.activeInstrument,
+        ...state,
+        activeInstrument: action.pl
+      };
+    case "ACTIVATE_INSTRUMENT":
+      let undo = state.activeInstrument;
+      return {
+        ...state,
+        instruments: {
+          ...state.instruments,
+          [undo]: {
+            ...state.instruments[undo],
+            active: !state.instruments[undo].active
           }
         }
       };
