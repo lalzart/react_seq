@@ -1,16 +1,21 @@
 .seq {
-  margin-top: 60px;
+  margin-top: 40px;
   display: grid;
   grid-template-columns: repeat(17, 1fr);
-  justify-items: center;
+  justify-items: start;
 }
 .labels {
   display: grid;
   grid-template-columns: repeat(17, 1fr);
-  justify-items: center;
+  justify-items: start;
   font-size: 9px;
+  padding-bottom: 180px;
 }
-
+.container {
+  padding-left: 20px;
+  padding-top: 20px;
+  background: rgb(226, 213, 183);
+}
 .instrUnselected {
   margin-top: 8px;
   background: #333;
@@ -23,7 +28,7 @@
 }
 .play {
   display: inline-block;
-  background: red;
+  background: rgb(209, 46, 5);
   padding: 12px;
   border-radius: 5px;
   color: #fff;
@@ -38,13 +43,14 @@
   height: 60px;
   width: 60px;
   border-radius: 4px;
-  border: 2px solid red;
+  border: 3px solid rgb(255, 63, 49);
+  background: #ccc;
 }
 .c {
   position: absolute;
   top: 0;
   left: 44%;
-  width: 4px;
+  width: 8px;
   height: 12px;
   background: red;
   justify-self: center;

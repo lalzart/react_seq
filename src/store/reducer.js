@@ -5,9 +5,10 @@ const initialState = {
   bpm: 120,
   step: null,
   activeInstrument: "BassDrum",
+  intervalID: undefined,
   instruments: {
     BassDrum: {
-      active: false,
+      active: true,
       track: [
         false,
         false,
@@ -306,16 +307,21 @@ const reducer = (state = initialState, action) => {
         activeInstrument: action.pl
       };
     case "ACTIVATE_INSTRUMENT":
-      let undo = state.activeInstrument;
+      let selected = state.activeInstrument;
       return {
         ...state,
         instruments: {
           ...state.instruments,
-          [undo]: {
-            ...state.instruments[undo],
-            active: !state.instruments[undo].active
+          [selected]: {
+            ...state.instruments[selected],
+            active: !state.instruments[selected].active
           }
         }
+      };
+    case "MANAGE_INTERVAL":
+      return {
+        ...state,
+        intervalID: action.pl
       };
   }
 
