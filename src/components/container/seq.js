@@ -2,10 +2,14 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import StepBtn from "../step/step";
 import Tempo from "../tempo/tempo";
+import * as actionTypes from "../../store/actions";
 
 import "./seq.css";
 export class container extends Component {
-  å;
+  state = {
+    running: false
+  };
+
   seqBtn = {
     buttons: [
       <StepBtn />,
@@ -28,17 +32,18 @@ export class container extends Component {
   };
 
   play = () => {
-    this.props.toggleSeq();
-    if (this.props.run) {
-      const intervalId = setInterval(this.sequence, this.props.bpm);
-      this.props.manageInterval(intervalId);
-    } else {
-      clearInterval(this.props.intervalID);
-    }
+    this.setState({ running: !this.state.running }, () => {
+      if (this.state.running) {
+        const intervalId = setInterval(this.sequence, this.props.bpm);
+        this.setState({ intervalId: intervalId });
+      } else {
+        clearInterval(this.state.intervalId);
+      }
+    });
   };
 
   sequence = () => {
-    if (this.props.step >= 16) {
+    if (this.props.step >= 15) {
       this.props.reset();
     } else {
       this.props.incrementStep();
@@ -57,24 +62,32 @@ export class container extends Component {
     this.props.activeInstrument(selected);
     this.props.activateInstrument(selected);
   };
+  trigger = currentStep => {
+    if (this.props.trigger) {
+      console.log("boom");
+    }
+  };
   render() {
     return (
       <React.Fragment>
         <div className="container">
           <div className="play" onClick={this.play}>
-            {this.props.run ? "Stop" : "Start"}
+            {this.state.running ? "Stop" : "Start"}
           </div>
           <Tempo className="tempo" changeBPM={this.handleBPM} />
           <div className="seq">
             {this.seqBtn.buttons.map((el, index) =>
               this.props.step === index ||
               this.props.currentInstr[index] === true ? (
-                <StepBtn
-                  addClassB="b"
-                  addClassC="c"
-                  key={index}
-                  handle={this.stepSelect.bind(this, index)}
-                />
+                (this.trigger(),
+                (
+                  <StepBtn
+                    addClassB="b"
+                    addClassC="c"
+                    key={index}
+                    handle={this.stepSelect.bind(this, index)}
+                  />
+                ))
               ) : (
                 <StepBtn
                   handle={this.stepSelect.bind(this, index)}
@@ -86,7 +99,7 @@ export class container extends Component {
           </div>
           <div className="labels">
             {Object.keys(this.props.instruments).map((el, i) =>
-              this.props.instruments[el].active ? (
+              this.props.aI === el ? (
                 <div
                   className="instrSelected"
                   onClick={this.instrSelect}
@@ -120,22 +133,27 @@ const mapStateToProps = state => {
     step: state.step,
     instruments: state.instruments,
     currentInstr: state.instruments[state.activeInstrument].track,
-    intervalID: state.intervalID
+    intervalID: state.intervalID,
+    aI: state.activeInstrument,
+    trigger: state.instruments.BassDrum.track[state.step]
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    toggleSeq: () => dispatch({ type: "TOGGLE_SEQ" }),
-    bpmChange: bpmChanged => dispatch({ type: "CHANGE_BPM", val: bpmChanged }),
-    incrementStep: () => dispatch({ type: "INCREMENT" }),
-    reset: () => dispatch({ type: "RESET_SEQ" }),
+    // toggleSeq: () => dispatch({ type: actionTypes.TOGGLE_SEQ }),
+    bpmChange: bpmChanged =>
+      dispatch({ type: actionTypes.BPM_CHANGE, val: bpmChanged }),
+    incrementStep: () => dispatch({ type: actionTypes.INCREMENT }),
+    reset: () => dispatch({ type: actionTypes.RESET_SEQ }),
     activeInstrument: instr =>
-      dispatch({ type: "ACTIVE_INSTRUMENT", pl: instr }),
+      dispatch({ type: actionTypes.ACTIVE_INSTRUMENT, pl: instr }),
     activateInstrument: instr =>
-      dispatch({ type: "ACTIVATE_INSTRUMENT", pl: instr }),
-    activateStep: step => dispatch({ type: "ACTIVATE_STEP", pl: step }),
-    manageInterval: int => dispatch({ type: "MANAGE_INTERVAL", pl: int })
+      dispatch({ type: actionTypes.ACTIVATE_INSTRUMENT, pl: instr }),
+    activateStep: step =>
+      dispatch({ type: actionTypes.ACTIVATE_STEP, pl: step }),
+    manageInterval: int =>
+      dispatch({ type: actionTypes.MANAGE_INTERVAL, pl: int })
   };
 };
 

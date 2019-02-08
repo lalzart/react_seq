@@ -1,3 +1,7 @@
-export const CURRENT_STEP = "CURRENT_STEP";
-export const BPM = "BPM";
-export const RUNNING = "RUNNING";
+export const BPM_CHANGE = "BPM_CHANGE";
+export const INCREMENT = "INCREMENT";
+export const RESET_SEQ = "RESET_SEQ";
+export const ACTIVE_INSTRUMENT = "ACTIVE_INSTRUMENT";
+export const ACTIVATE_INSTRUMENT = "ACTIVATE_INSTRUMENT";
+export const ACTIVATE_STEP = "ACTIVATE_STEP";
+export const MANAGE_INTERVAL = "MANAGE_INTERVAL";

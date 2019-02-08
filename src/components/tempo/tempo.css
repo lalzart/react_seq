@@ -3,10 +3,13 @@
   font-size: 20px;
 }
 .bpm input {
+  text-align: center;
   border: none;
   font-size: 20px;
   font-weight: bold;
-  background: rgb(226, 213, 183);
+  width: 60px;
+  padding: 10px;
+  background: rgb(216, 213, 200);
 }
 .bpm {
   display: inline;

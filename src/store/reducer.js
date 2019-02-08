@@ -1,7 +1,6 @@
-// import * as actionTypes from "./actions";
+import * as actionTypes from "./actions";
 
 const initialState = {
-  running: false,
   bpm: 120,
   step: null,
   activeInstrument: "BassDrum",
@@ -217,7 +216,7 @@ const initialState = {
         false
       ]
     },
-    ClosedHihat: {
+    ClsdHihat: {
       active: false,
       track: [
         false,
@@ -265,27 +264,27 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   // eslint-disable-next-line
   switch (action.type) {
-    case "TOGGLE_SEQ":
-      return {
-        ...state,
-        running: !state.running
-      };
-    case "CHANGE_BPM":
+    // case actionTypes.TOGGLE_SEQ:
+    //   return {
+    //     ...state,
+    //     running: !state.running
+    //   };
+    case actionTypes.BPM_CHANGE:
       return {
         ...state,
         bpm: action.val
       };
-    case "INCREMENT":
+    case actionTypes.INCREMENT:
       return {
         ...state,
         step: state.step + 1
       };
-    case "RESET_SEQ":
+    case actionTypes.RESET_SEQ:
       return {
         ...state,
         step: 0
       };
-    case "ACTIVATE_STEP":
+    case actionTypes.ACTIVATE_STEP:
       const arr = state.activeInstrument;
       return {
         ...state,
@@ -299,14 +298,15 @@ const reducer = (state = initialState, action) => {
           }
         }
       };
-    case "ACTIVE_INSTRUMENT":
+    case actionTypes.ACTIVE_INSTRUMENT:
       return {
         ...state,
         activeInstrument: !state.activeInstrument,
         ...state,
+        // eslint-disable-next-line
         activeInstrument: action.pl
       };
-    case "ACTIVATE_INSTRUMENT":
+    case actionTypes.ACTIVATE_INSTRUMENT:
       let selected = state.activeInstrument;
       return {
         ...state,
@@ -318,7 +318,7 @@ const reducer = (state = initialState, action) => {
           }
         }
       };
-    case "MANAGE_INTERVAL":
+    case actionTypes.MANAGE_INTERVAL:
       return {
         ...state,
         intervalID: action.pl
